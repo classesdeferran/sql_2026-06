@@ -106,5 +106,22 @@ empresa VARCHAR(30),
 id_ciudad int
 );
 
+INSERT INTO clientes(nombre_cliente, apellido_cliente, empresa, id_ciudad) VALUES
+("Bill", "Gates", null, (SELECT id_ciudad FROM ciudades WHERE nombre_ciudad = "Chicago" )),
+(null, null, "Apple", (SELECT id_ciudad FROM ciudades WHERE nombre_ciudad = "Lleida" )),
+("Steve", "Ballmer", null, (SELECT id_ciudad FROM ciudades WHERE nombre_ciudad = "Chicago" )),
+("Salvador", "Illa", null, (SELECT id_ciudad FROM ciudades WHERE nombre_ciudad = "Vic" ));
+
+CREATE TABLE ventas(
+id_venta INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+id_producto INT NOT NULL,
+id_cliente INT NOT NULL,
+cantidad INT NOT NULL
+);
+
+INSERT INTO ventas(id_producto, id_cliente, cantidad) VALUES
+(3, 1, 1), (3, 3, 3), (4, 4, 1);
+
+
 
 
