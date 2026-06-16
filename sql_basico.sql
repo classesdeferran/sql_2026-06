@@ -126,5 +126,27 @@ INSERT INTO poblaciones(nombre_poblacion) VALUES
 SELECT * FROM poblaciones;
 SELECT * FROM proveedores;
 
+UPDATE proveedores SET id_poblacion = 1 WHERE id_proveedor = 1;
+UPDATE proveedores SET id_poblacion = id_proveedor;
+
+-- Nuevo proveedor
+INSERT INTO proveedores(nombre_proveedor, tel_fijo, id_poblacion) VALUES
+("Pineapple", "456789123", 1);
+
+SELECT pr.nombre_proveedor
+FROM proveedores pr, poblaciones po
+WHERE pr.id_poblacion = po.id_poblacion 
+AND po.nombre_poblacion = "Barcelona";
+
+SELECT pr.nombre_proveedor, po.nombre_poblacion
+FROM proveedores pr
+JOIN poblaciones po
+ON pr.id_poblacion = po.id_poblacion;
+
+
+
+
+
+
 
 
