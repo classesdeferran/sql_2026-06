@@ -84,8 +84,8 @@ ADD COLUMN id_proveedor INT;
 UPDATE productos pr
 JOIN proveedores p
 ON pr.nombre_proveedor = p.nombre_proveedor
-
 SET pr.id_proveedor = p.id_proveedor;
+
 ALTER TABLE productos
 DROP COLUMN nombre_proveedor, DROP COLUMN tel_proveedor, DROP COLUMN email_proveedor, DROP COLUMN ciudad_proveedor;
 
@@ -122,6 +122,7 @@ cantidad INT NOT NULL
 INSERT INTO ventas(id_producto, id_cliente, cantidad) VALUES
 (3, 1, 1), (3, 3, 3), (4, 4, 1);
 
+# ¿Qué clientes han comprado productos de proveedores de Lleida?
 
 
 
