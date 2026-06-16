@@ -61,5 +61,50 @@ FROM ciudades c
 JOIN proveedores p
 ON c.nombre_ciudad = p.nombre_ciudad;
 
+SELECT * FROM proveedores;
+
+UPDATE proveedores p
+JOIN ciudades c
+ON c.nombre_ciudad = p.nombre_ciudad
+SET p.id_ciudad = c.id_ciudad;
+
+ALTER TABLE proveedores
+DROP COLUMN nombre_ciudad;
+
+SELECT p.nombre_proveedor, c.nombre_ciudad
+FROM proveedores p
+JOIN ciudades c
+ON p.id_ciudad = c.id_ciudad;
+
+SELECT * FROM productos;
+
+ALTER TABLE productos
+ADD COLUMN id_proveedor INT;
+
+UPDATE productos pr
+JOIN proveedores p
+ON pr.nombre_proveedor = p.nombre_proveedor
+
+SET pr.id_proveedor = p.id_proveedor;
+ALTER TABLE productos
+DROP COLUMN nombre_proveedor, DROP COLUMN tel_proveedor, DROP COLUMN email_proveedor, DROP COLUMN ciudad_proveedor;
+
+INSERT INTO ciudades(nombre_ciudad) VALUES("Vic"), ("Chicago"), ("Paris");
+
+INSERT INTO proveedores(nombre_proveedor, tel_proveedor, email_proveedor, id_ciudad) VALUES
+("Michael Corleone", "1234", "michael@corleone.com", (SELECT id_ciudad FROM ciudades WHERE nombre_ciudad = "Chicago"));
+
+INSERT INTO productos(nombre_producto, precio_compra, precio_venta, referencia_producto, id_proveedor) VALUES
+("Testa Rossa", 50000, 90000, "T1", (SELECT id_proveedor FROM proveedores WHERE nombre_proveedor LIKE "M%")),
+("Corsa", 5000, 9000, "C1", (SELECT id_proveedor FROM proveedores WHERE nombre_proveedor LIKE "M%"));
+
+CREATE TABLE clientes(
+id_cliente INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+nombre_cliente VARCHAR(30),
+apellido_cliente VARCHAR(30),
+empresa VARCHAR(30),
+id_ciudad int
+);
+
 
 
