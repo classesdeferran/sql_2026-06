@@ -19,4 +19,9 @@ precio_venta DECIMAL(8, 2),
 referencia_producto VARCHAR(8)
 );
 
-
+# introducción de registros = productos
+-- INSERT INTO productos(nombre_producto) VALUES("Micra"); -- esto es un error porque el nombre_proveedor es obligatorio
+INSERT INTO productos(nombre_producto, nombre_proveedor, tel_proveedor, 
+email_proveedor, ciudad_proveedor, precio_compra, precio_venta, referencia_producto) VALUES
+("Micra", "AUTOS SA", "123456789", "info@autossa.com", "Lleida", 4000, 6000, "M1"),
+("Raval", "AUTOS SA", "123456789", "info@autossa.com", "Lleida", 6000, 8000, "R1");
