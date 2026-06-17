@@ -240,6 +240,17 @@ FROM clientes;
 SELECT * 
 FROM clientes;
 
+# Funciones de agregación son: SUM, COUNT, MAX, MIN, AVG
+# Coste promedio de los productos
+SELECT AVG(precio_compra) as avg, ROUND(AVG(precio_compra), 2) as round, CEIL(AVG(precio_compra)) as ceil, FLOOR(AVG(precio_compra)) as floor
+FROM productos;
+
+# Productos con precio de venta por encima del promedio
+select nombre_producto, precio_venta
+FROM productos
+GROUP BY precio_venta
+having precio_venta > avg(precio_venta)
+
 # ¿Qué clientes han realizado algún pedido (sin repeticiones)?
 
 # ¿Qué ciudades tienen un nombre compuesto? (Como Hospitalet de Llobregat)
@@ -253,4 +264,9 @@ FROM clientes;
 # ¿Cuántos vehículos hemos vendido de los proveedores de Viena?
 
 # ¿Con qué proveedor/es ganamos más dinero?
+
+# ¿De qué producto hemos realizado más ventas?
+
+# ¿De qué ciudades no tenemos productos?
+
 
