@@ -233,6 +233,8 @@ WHERE v.id_cliente IS NULL
 ORDER BY cliente ASC;
 
 # ¿Cuántos clientes tenemos registrados?
+SELECT COUNT(*) as clientes
+FROM clientes;
 
 # ¿Cuántos de nuestros clientes son empresas y cuántos personas?
 SELECT * 
@@ -240,4 +242,15 @@ FROM clientes;
 
 # ¿Qué clientes han realizado algún pedido (sin repeticiones)?
 
+# ¿Qué ciudades tienen un nombre compuesto? (Como Hospitalet de Llobregat)
+
+# ¿Cuántas ciudades empiezan por "B"?
+
+# ¿Cuántas ciudades contienen la letra "e"?
+
+# ¿Qué beneficio hemos obtenido de los proveedores de Praga?
+
+# ¿Cuántos vehículos hemos vendido de los proveedores de Viena?
+
+# ¿Con qué proveedor/es ganamos más dinero?
 
