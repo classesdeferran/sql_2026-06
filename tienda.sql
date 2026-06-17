@@ -237,19 +237,13 @@ SELECT COUNT(*) as clientes
 FROM clientes;
 
 # ¿Cuántos de nuestros clientes son empresas y cuántos personas?
-SELECT * 
+SELECT 
 FROM clientes;
 
 # Funciones de agregación son: SUM, COUNT, MAX, MIN, AVG
 # Coste promedio de los productos
 SELECT AVG(precio_compra) as avg, ROUND(AVG(precio_compra), 2) as round, CEIL(AVG(precio_compra)) as ceil, FLOOR(AVG(precio_compra)) as floor
 FROM productos;
-
-# Productos con precio de venta por encima del promedio
-select nombre_producto, precio_venta
-FROM productos
-GROUP BY precio_venta
-having precio_venta > avg(precio_venta)
 
 # ¿Qué clientes han realizado algún pedido (sin repeticiones)?
 
@@ -269,4 +263,5 @@ having precio_venta > avg(precio_venta)
 
 # ¿De qué ciudades no tenemos productos?
 
+# Productos con precio de venta por encima del promedio
 
