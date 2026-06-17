@@ -123,6 +123,57 @@ INSERT INTO ventas(id_producto, id_cliente, cantidad) VALUES
 (3, 1, 1), (3, 3, 3), (4, 4, 1);
 
 # ¿Qué clientes han comprado productos de proveedores de Lleida?
+SELECT cl.nombre_cliente, cl.empresa
+FROM clientes cl
+JOIN ventas v
+ON cl.id_cliente = v.id_cliente
+JOIN productos pd
+ON pd.id_producto = v.id_producto
+JOIN proveedores pv
+ON pd.id_proveedor = pv.id_proveedor
+JOIN ciudades c
+ON c.id_ciudad = pv.id_ciudad
+WHERE c.nombre_ciudad = "Lleida";
+
+# ¿Qué clientes tiene un nombre que empieza por S?
+SELECT CONCAT( nombre_cliente, " ", apellido_cliente) as "el cliente es"
+FROM clientes
+WHERE nombre_cliente LIKE "S%";
+
+SELECT CONCAT_WS(" ", nombre_cliente, apellido_cliente, "y su id es", id_cliente) as "el cliente es"
+FROM clientes
+WHERE nombre_cliente LIKE "S%";
+
+# ¿Cuántas ventas hemos hecho?
+SELECT COUNT(*) as "ventas realizadas"
+FROM ventas;
+
+# ¿Cuántos coches hemos vendido?
+SELECT SUM(cantidad)
+FROM ventas;
+
+# ¿Cuánto dinero hemos ganado hasta ahora?
+SELECT SUM(v.cantidad * (p.precio_venta - precio_compra)) as beneficio
+FROM ventas v
+JOIN productos p
+ON v.id_producto = p.id_producto;
+
+# Precio y nombre del coche más caro
+SELECT precio_venta as pv, nombre_producto
+FROM productos
+where precio_venta = (SELECT MAX(precio_venta) FROM productos);
+
+# El Corsa lo compramos a 4000
+UPDATE productos 
+SET precio_compra = 4000
+WHERE nombre_producto = "Corsa";
+
+# Precio y nombre del coche más barato
+SELECT precio_compra, nombre_producto
+FROM productos
+where precio_compra = (SELECT MIN(precio_compra) FROM productos);
+
+# ¿Quién es nuestro mejor cliente?
 
 
 
