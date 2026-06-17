@@ -265,3 +265,6 @@ FROM productos;
 
 # Productos con precio de venta por encima del promedio
 
+# Clientes que han hecho más de 10 compras
+
+
