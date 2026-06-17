@@ -202,10 +202,37 @@ SELECT precio_compra, nombre_producto
 FROM productos
 where precio_compra = (SELECT MIN(precio_compra) FROM productos);
 
+# ¿Qué cliente/s ha realizado más pedidos?
+SELECT cl.nombre_cliente, cl.apellido_cliente, cl.empresa, COUNT(*) as ventas
+FROM clientes cl
+JOIN ventas v ON cl.id_cliente = v.id_cliente
+GROUP BY v.id_cliente
+ORDER BY ventas DESC
+LIMIT 5;
+
+# ¿Qué cliente/s han comprado más productos?
+SELECT TRIM(concat_ws(' ',IFNULL(cl.nombre_cliente, ''), IFNULL(cl.apellido_cliente, ''), IFNULL(cl.empresa, ''))) as cliente , SUM(v.cantidad) as cantidades
+FROM clientes cl
+JOIN ventas v ON cl.id_cliente = v.id_cliente
+GROUP BY v.id_cliente
+ORDER BY cantidades DESC;
+
 # ¿Quién es nuestro mejor cliente?
-SELECT cl.nombre_cliente, cl.apellido_cliente, cl.empresa, v.id_venta, v.cantidad
+SELECT cl.nombre_cliente, cl.apellido_cliente, cl.empresa, SUM(v.cantidad * (p.precio_venta - p.precio_compra)) as beneficio
 FROM clientes cl
 INNER JOIN ventas v ON cl.id_cliente = v.id_cliente
-ORDER BY cl.nombre_cliente, cl.apellido_cliente 
+INNER JOIN productos p ON v.id_producto = p.id_producto
+GROUP BY v.id_cliente
+ORDER BY beneficio DESC;
+
+# ¿Quienes son nuestro peores clientes?
+SELECT TRIM(concat_ws(' ',IFNULL(cl.nombre_cliente, ''), IFNULL(cl.apellido_cliente, ''), IFNULL(cl.empresa, ''))) as cliente, v.id_cliente
+FROM clientes cl
+LEFT JOIN ventas v ON cl.id_cliente = v.id_cliente
+WHERE v.id_cliente IS NULL
+ORDER BY cliente ASC;
+
+# ¿Cuántos de nuestros clientes son empresas y cuántos personas?
+
 
 
