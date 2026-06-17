@@ -232,7 +232,12 @@ LEFT JOIN ventas v ON cl.id_cliente = v.id_cliente
 WHERE v.id_cliente IS NULL
 ORDER BY cliente ASC;
 
-# ¿Cuántos de nuestros clientes son empresas y cuántos personas?
+# ¿Cuántos clientes tenemos registrados?
 
+# ¿Cuántos de nuestros clientes son empresas y cuántos personas?
+SELECT * 
+FROM clientes;
+
+# ¿Qué clientes han realizado algún pedido (sin repeticiones)?
 
 
