@@ -9,6 +9,8 @@ CREATE DATABASE IF NOT EXISTS tienda;
 # indicar a mysql que vamos a usar la bd tienda
 USE tienda;
 
+DESCRIBE productos;
+
 # creación de la tabla productos
 CREATE TABLE productos(
 id_producto INT NOT NULL AUTO_INCREMENT PRIMARY KEY,

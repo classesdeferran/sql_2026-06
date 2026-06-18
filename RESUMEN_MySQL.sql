@@ -99,7 +99,7 @@ RENAME COLUMN provincia TO distrito;
 
 -- borrado de columna
 ALTER TABLE poblaciones
-DROP COLUMN provincia;
+DROP COLUMN distrito;
 
 /*
 TIPOS DE DATOS
@@ -159,6 +159,97 @@ ADD CONSTRAINT fk_doctores_poblaciones
 FOREIGN KEY (id_poblacion)
 REFERENCES poblaciones(id_poblacion);
 
+ALTER TABLE doctores
+MODIFY COLUMN especialidad ENUM('Traumatología', 'Oftalmología', 'Neurología');
+
+ALTER TABLE consultas
+ADD COLUMN tratamiento varchar(100);
+
+/*
+C reate => INSERT
+R ead => SELECT
+U pdate 
+D elete
+*/
+
+# INSERT INTO nombre_tabla VALUES ()
+INSERT INTO poblaciones VALUES(1, "Barcelona"); -- lo hace el sistema
+INSERT INTO poblaciones(nombre_poblacion) VALUES ("Hospitalet"),('Cornellà');
+
+# INSERT INTO usuarios_2 SELECT * FROM usuarios;
+
+INSERT INTO usuarios(nombre_usuario, apellido_usuario, fecha_nacimiento, dni, id_poblacion) VALUES
+("Peter", "Parker", "2000-01-01", "12345678A", 1);
+INSERT INTO usuarios(nombre_usuario, apellido_usuario, fecha_nacimiento, dni, id_poblacion) VALUES
+("Clark", "Kent", "1990-01-01", "12345678B", 1);
+INSERT INTO usuarios(nombre_usuario, apellido_usuario, fecha_nacimiento, dni, id_poblacion) VALUES
+("Son", "Goku", "2001-01-01", "12345678D", 1),
+("Loise", "Lane", "1995-06-18", "12345678F", 2),
+("John", "Lennon", "1998-06-18", "12345678E", 2);
+INSERT INTO usuarios VALUES
+(2,"John", "Smith","2001-01-01", "12345678G", 1, "2025-06-18 18:29:53", "2025-06-18 18:29:53");
+
+# UPDATE => modificar el valor de datos
+UPDATE usuarios
+SET id_poblacion = 2
+WHERE nombre_usuario = "John" AND apellido_usuario="Smith";
+
+INSERT INTO usuarios(nombre_usuario, apellido_usuario, fecha_nacimiento, dni, id_poblacion) VALUES
+("Tryon", "Lannister", "2001-01-01", "12345678H", 
+(SELECT id_poblacion FROM poblaciones WHERE nombre_poblacion = "Barcelona"));
+
+/* 
+SELECT
+FROM
+NATURAL JOIN, [INNER] JOIN, LEFT JOIN, RIGHT JOIN, FULL [OUTER] JOIN + ON campos comunes
+WHERE
+GROUP BY 
+HAVING
+ORDER BY
+LIMIT
+*/
+
+SELECT u.nombre_usuario, u.apellido_usuario
+FROM usuarios u
+NATURAL JOIN poblaciones p
+WHERE p.nombre_poblacion = "Barcelona" OR p.nombre_poblacion = "Hospitalet";
+
+SELECT u.nombre_usuario, u.apellido_usuario
+FROM usuarios u
+NATURAL JOIN poblaciones p
+WHERE p.nombre_poblacion IN ("Barcelona", "Cornellà");
+
+SELECT u.nombre_usuario, u.apellido_usuario
+FROM usuarios u
+NATURAL JOIN poblaciones p
+WHERE p.nombre_poblacion NOT IN ("Barcelona", "Cornellà");
+
+SELECT u.nombre_usuario, u.apellido_usuario
+FROM usuarios u
+WHERE u.nombre_usuario LIKE "J%";
+
+SELECT u.nombre_usuario, u.apellido_usuario
+FROM usuarios u
+WHERE u.apellido_usuario LIKE "_e%";
+
+SELECT u.nombre_usuario, u.apellido_usuario, u.fecha_nacimiento
+FROM usuarios u
+WHERE u.fecha_nacimiento BETWEEN '1995-01-01' AND '1999-12-31';
+
+SELECT u.nombre_usuario, u.apellido_usuario, u.fecha_nacimiento
+FROM usuarios u
+WHERE u.nombre_usuario BETWEEN 'C' AND 'M';
 
 
+
+
+
+
+
+
+
+
+
+
+-- Lista de funciones: https://www.w3schools.com/mysql/mysql_ref_functions.asp
 
