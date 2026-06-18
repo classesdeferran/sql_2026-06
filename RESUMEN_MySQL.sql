@@ -187,7 +187,7 @@ INSERT INTO usuarios(nombre_usuario, apellido_usuario, fecha_nacimiento, dni, id
 ("Loise", "Lane", "1995-06-18", "12345678F", 2),
 ("John", "Lennon", "1998-06-18", "12345678E", 2);
 INSERT INTO usuarios VALUES
-(2,"John", "Smith","2001-01-01", "12345678G", 1, "2025-06-18 18:29:53", "2025-06-18 18:29:53");
+(10,"John", "Smith","2001-01-01", "12345678G", 1, "2025-06-18 18:29:53", "2025-06-18 18:29:53");
 
 # UPDATE => modificar el valor de datos
 UPDATE usuarios
