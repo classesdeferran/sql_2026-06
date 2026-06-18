@@ -209,6 +209,8 @@ ORDER BY
 LIMIT
 */
 
+# MODIFICADORES WHERE
+
 SELECT u.nombre_usuario, u.apellido_usuario
 FROM usuarios u
 NATURAL JOIN poblaciones p
@@ -240,16 +242,79 @@ SELECT u.nombre_usuario, u.apellido_usuario, u.fecha_nacimiento
 FROM usuarios u
 WHERE u.nombre_usuario BETWEEN 'C' AND 'M';
 
+# Queremos saber qué usuarios son de la misma ciudad
+SELECT A.apellido_usuario as usuario_1, B.apellido_usuario as usuario2
+FROM usuarios A, usuarios B
+WHERE A.id_poblacion = B.id_poblacion AND A.apellido_usuario <> B.apellido_usuario
+ORDER BY A.id_poblacion
+;
 
-
-
-
-
-
-
-
-
-
-
+/*
+FUNCIONES del sistema
 -- Lista de funciones: https://www.w3schools.com/mysql/mysql_ref_functions.asp
+
+-- Funciones de agregación: MAX(), MIN(), AVG(), COUNT(), SUM()
+-- Funciones lógicas: IFNULL(), IF(), COALESCE()
+-- Funciones de texto: CONCAT, CONCAT_WS(), LOWER(), UPPER(), REPLACE()
+-- Funciones de fecha
+*/
+
+# ¿Cuántos usuarios son de Barcelona?
+SELECT count(*) as "usuarios de Barcelona"
+FROM usuarios u
+NATURAL JOIN poblaciones p
+WHERE p.nombre_poblacion = "Barcelona";
+
+SET @max_id = (SELECT MAX(id_poblacion) FROM usuarios u);
+SELECT @max_id;
+
+INSERT INTO doctores(nombre_doctor, apellido_doctor, fecha_nacimiento, id_poblacion, especialidad) VALUES
+("James", "Cameron", "1980-12-25", 2, "Oftalmología");
+
+-- TRUNCATE TABLE consultas;
+
+ALTER TABLE consultas
+MODIFY COLUMN tratamiento DECIMAL (5,2);
+
+INSERT INTO consultas(id_usuario, id_doctor, fecha_concertada, tratamiento) VALUES
+(1,1, "2026-06-19", 30), 
+(2,1,"2026-06-22", 12 ), 
+(2,1,"2026-07-22", 0 ), 
+(3,1,"2026-06-25", 50 );
+
+# Queremos saber cuál es el promedio de coste del tratamiento por usuario
+SELECT id_usuario, AVG(tratamiento) 
+FROM consultas
+GROUP BY id_usuario;
+ 
+
+# Queremos saber qué usuarios tienen el coste promedio por encima de la media
+SELECT id_usuario, AVG(tratamiento) as promedio_personal
+FROM consultas
+GROUP BY id_usuario
+HAVING promedio_personal >(SELECT AVG(tratamiento) FROM consultas);
+
+/* No funciona
+SELECT id_usuario, AVG(tratamiento) as promedio_personal
+FROM consultas
+WHERE tratamiento >(SELECT AVG(tratamiento) 
+FROM consultas)
+GROUP BY id_usuario;
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
