@@ -1,5 +1,8 @@
 # Base de datos de una tienda
 
+# Eliminar la base de datos si existe
+DROP DATABASE IF EXISTS tienda;
+
 # crear la base de datos
 CREATE DATABASE IF NOT EXISTS tienda;
 

@@ -1,4 +1,4 @@
-# ¿Qué diferencia hay entre TRUNCATE Y DELETE?
+TRUNCATE TABLE ciudades;
 
 
 
