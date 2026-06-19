@@ -520,6 +520,39 @@ WHERE codigo_usuario IS NULL;
 -- UPDATE usuarios SET codigo_usuario = NULL;
 
 
+/* VISTA = VIEW
+	Sirve para almacenar el resultado de una consulta
+*/
+
+USE clinica;
+
+DROP VIEW IF EXISTS usuarios_consultas;
+
+CREATE OR REPLACE VIEW usuarios_consultas AS 
+SELECT 
+	CONCAT(u.nombre_usuario,
+                ' ',
+                u.apellido_usuario) AS usuario,
+    u.fecha_nacimiento,
+    u.dni,
+    p.nombre_poblacion,
+	COALESCE(u.tel_movil, u.tel_fijo, "No tenemos datos de contacto") as contacto,
+    c.fecha_concertada,
+    CONCAT(d.nombre_doctor, " ", d.apellido_doctor) as doctor,
+    d.especialidad
+FROM poblaciones p
+JOIN usuarios u USING(id_poblacion)
+JOIN consultas c USING(id_usuario)
+JOIN doctores d USING(id_doctor)
+;
+
+SELECT * FROM usuarios_consultas;
+
+RENAME TABLE usuarios_consultas TO usuarios_consultas_doctores;
+
+
+    
+
 
 
 
