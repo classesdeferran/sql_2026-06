@@ -503,7 +503,21 @@ ADD COLUMN codigo_usuario VARCHAR(9);
 
 # Hay que actualizar los códigos de usuario con valores aleatorios
 # según este patrón: 4 letras - 4 números. Por ejemplo: ABCD-1234
+UPDATE usuarios
+SET codigo_usuario = CONCAT(
+		SUBSTRING("ABCDEFGHIJKLMNOPQRSTUVWZ", FLOOR((RAND() *24)) +1, 1),
+        SUBSTRING("ABCDEFGHIJKLMNOPQRSTUVWZ", FLOOR((RAND() *24)) +1, 1),
+        SUBSTRING("ABCDEFGHIJKLMNOPQRSTUVWZ", FLOOR((RAND() *24)) +1, 1),
+        SUBSTRING("ABCDEFGHIJKLMNOPQRSTUVWZ", FLOOR((RAND() *24)) +1, 1),
+        "-",
+        SUBSTRING("1234567890", FLOOR((RAND() *10)) +1, 1),
+        SUBSTRING("1234567890", FLOOR((RAND() *10)) +1, 1),
+        SUBSTRING("1234567890", FLOOR((RAND() *10)) +1, 1),
+        SUBSTRING("1234567890", FLOOR((RAND() *10)) +1, 1)
+)
+WHERE codigo_usuario IS NULL;
 
+-- UPDATE usuarios SET codigo_usuario = NULL;
 
 
 
