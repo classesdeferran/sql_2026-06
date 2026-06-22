@@ -674,12 +674,36 @@ SELECT c.id_consulta, c.fecha_concertada FROM consultas c
 
 -- Crear un SP mediante (nombre, apellido, dni, poblacion(string), especialidad)
   
+/* TRIGGERS = Disparadores
+	Acciones que se desencadenan cuando se produce un INSERT, UPDATE o DELETE
+*/
+-- Si se activa antes de la acción: BEFORE ON nombre_tabla
+-- Si se activa después de la acción: AFTER ON nombre_tabla
+DROP TRIGGER IF EXISTS verificar_cod_user;
+DELIMITER %%
 
+CREATE TRIGGER verificar_cod_user
+# Si se activa antes de la acción: BEFORE ON nombre_tabla
+# Si se activa después de la acción: AFTER ON nombre_tabla
+BEFORE INSERT ON usuarios
+FOR EACH ROW
+BEGIN
+	DECLARE code_user VARCHAR(9);
+    
+    SELECT codigo_usuario
+    INTO code_user
+    FROM usuarios
+    WHERE codigo_usuario = new.codigo_usuario;
+    
+    IF code_user IS NOT NULL THEN
+		SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = "El código de usuario ya existe";
+    END IF;
+END %%
+DELIMITER ;
 
-
-
-
-
+INSERT INTO usuarios(nombre_usuario, apellido_usuario, dni, fecha_nacimiento, id_poblacion, codigo_usuario) VALUES
+("Franz", "Kafka", "87654321B", "1999-06-23", 2, "PPIV-4082");
 
 
 
