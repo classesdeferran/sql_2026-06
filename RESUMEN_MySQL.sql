@@ -557,19 +557,58 @@ RENAME TABLE usuarios_consultas TO usuarios_consultas_doctores;
 
 USE clinica;
 
+DROP FUNCTION IF EXISTS usuarios_tratamiento;
 DELIMITER $$
 CREATE FUNCTION usuarios_tratamiento(p_id_usuario INT)
 	RETURNS DECIMAL(6, 2)
 	DETERMINISTIC
 	BEGIN
-		SET @coste = (
+		SET @coste = IFNULL((
 			SELECT SUM(c.tratamiento)
             FROM consultas c 
             WHERE c.id_usuario = p_id_usuario
-            );
+            ), 0);
 		RETURN @coste;
-	END;
+	END $$
 DELIMITER ;
+
+SELECT @coste;
+SELECT nombre_usuario, apellido_usuario, usuarios_tratamiento(id_usuario)
+FROM usuarios;
+
+/* PROCEDIMIENTOS ALMACENADOS = STORED PROCEDURES
+	Funciones en programación
+*/
+
+DROP PROCEDURE IF EXISTS crear_consulta;
+DELIMITER //
+CREATE PROCEDURE crear_consulta(
+IN p_nombre_usuario VARCHAR(50),
+IN p_apellido_usuario VARCHAR(50),
+IN p_dni VARCHAR(10),
+IN p_nombre_doctor VARCHAR(50),
+IN p_apellido_doctor VARCHAR(50),
+IN p_fecha_concertada DATE
+)
+BEGIN
+	DECLARE id_consulta INT DEFAULT NULL;
+    SET id_consulta = (
+		SELECT c.id_consulta FROM consultas c 
+		INNER JOIN doctores d
+		ON c.id_doctor = d.id_doctor
+		WHERE d.nombre_doctor = p_nombre_doctor
+		AND d.apellido_doctor = p_apellido_doctor
+		AND c.fecha_concertada = p_fecha_concertada
+		); 
+	IF id_consulta IS NOT NULL THEN
+		SELECT "Hora ocupada";
+	ELSE
+		SELECT "Consulta creada";
+	END IF;
+END //
+DELIMITER ;
+
+CALL crear_consulta("A", "B", "C", "James", "Cameron", "2026-06-22");
 
     
 
