@@ -550,6 +550,26 @@ SELECT * FROM usuarios_consultas;
 
 RENAME TABLE usuarios_consultas TO usuarios_consultas_doctores;
 
+/* FUNCIONES
+	Calcular, procesar datos y obligatoriamente devolver un valor
+    Se utilizan dentro de SELECT
+*/
+
+USE clinica;
+
+DELIMITER $$
+CREATE FUNCTION usuarios_tratamiento(p_id_usuario INT)
+	RETURNS DECIMAL(6, 2)
+	DETERMINISTIC
+	BEGIN
+		SET @coste = (
+			SELECT SUM(c.tratamiento)
+            FROM consultas c 
+            WHERE c.id_usuario = p_id_usuario
+            );
+		RETURN @coste;
+	END;
+DELIMITER ;
 
     
 
