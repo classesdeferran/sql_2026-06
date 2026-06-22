@@ -472,9 +472,9 @@ SELECT id_consulta, DATEDIFF(fecha_concertada, fecha_peticion) as dias
 FROM consultas
 WHERE DATEDIFF(fecha_concertada, fecha_peticion) > 5;
 
-/* CURDATE() */
+/* CURDATE() --> año-mes-dia */
 SELECT CURDATE();
-/* NOW() */
+/* NOW() --> año-mes-dia hora-minutos-segundos */
 SELECT NOW();
 
 # Cuántos días faltan para las consultas pendientes
@@ -588,34 +588,92 @@ IN p_apellido_usuario VARCHAR(50),
 IN p_dni VARCHAR(10),
 IN p_nombre_doctor VARCHAR(50),
 IN p_apellido_doctor VARCHAR(50),
-IN p_fecha_concertada DATE
+IN p_especialidad VARCHAR(50),
+IN p_fecha_concertada DATETIME
 )
-BEGIN
+proc:BEGIN
 	DECLARE id_consulta INT DEFAULT NULL;
+    DECLARE p_id_usuario INT DEFAULT NULL;
+    DECLARE p_id_doctor INT DEFAULT NULL;
+    DECLARE fecha_actual DATETIME DEFAULT current_timestamp;
+    -- Revisar la fecha
+    IF p_fecha_concertada < fecha_actual THEN
+		SELECT "fecha no válida" AS mensaje;
+        LEAVE proc;
+	END IF;
+    -- Revisar el nombre del usuario
+    SET p_id_usuario = (
+		SELECT id_usuario 
+        FROM usuarios
+        WHERE nombre_usuario = p_nombre_usuario
+        AND apellido_usuario = p_apellido_usuario
+        AND dni = p_dni
+    );
+    IF p_id_usuario IS NULL THEN
+		SELECT "Error en los datos del usuario" as error;
+        LEAVE proc;
+	END IF;
+    -- Revisar el nombre del doctor
+    SET p_id_doctor = (
+		SELECT id_doctor 
+        FROM doctores
+        WHERE nombre_doctor = p_nombre_doctor
+        AND apellido_doctor = p_apellido_doctor
+        AND especialidad = p_especialidad
+        );
+	IF p_id_doctor IS NULL THEN
+		SELECT "Error en los datos del doctor" as error;
+        LEAVE proc;
+	END IF;
+    
+    -- Verificar si existe la consulta
     SET id_consulta = (
 		SELECT c.id_consulta FROM consultas c 
 		INNER JOIN doctores d
 		ON c.id_doctor = d.id_doctor
 		WHERE d.nombre_doctor = p_nombre_doctor
 		AND d.apellido_doctor = p_apellido_doctor
-		AND c.fecha_concertada = p_fecha_concertada
+		AND c.fecha_concertada BETWEEN (DATE_FORMAT(p_fecha_concertada, "%Y-%m-%d %H:00:00"))
+		AND (DATE_FORMAT(p_fecha_concertada, "%Y-%m-%d %H:59:59"))
 		); 
 	IF id_consulta IS NOT NULL THEN
 		SELECT "Hora ocupada";
 	ELSE
-		SELECT "Consulta creada";
-	END IF;
+		INSERT INTO consultas(id_usuario, id_doctor, fecha_concertada) 
+        VALUES (p_id_usuario, p_id_doctor, p_fecha_concertada);
+		SELECT "Consulta creada con éxito" as resultado;
+	END IF;	
 END //
 DELIMITER ;
 
-CALL crear_consulta("A", "B", "C", "James", "Cameron", "2026-06-22");
+CALL crear_consulta("Peter", "Parker", "12345678A", "James", "Cameron", "Oftalmología", "2026-06-26 18:15:00");
 
     
+/*
+-- Variable de prueba
+SET @fecha_concertada =  "2026-06-26 16:50:00";
+SELECT c.id_consulta, c.fecha_concertada FROM consultas c 
+		INNER JOIN doctores d
+		ON c.id_doctor = d.id_doctor
+		WHERE d.nombre_doctor = "James"
+		AND d.apellido_doctor = "Cameron"
+        -- Definir un rango entre la hora de la tabla en formato 00:00 y 59 minutos 59 segundos después
+        AND ((DATE_FORMAT(@fecha_concertada, "%Y-%m-%d %H:00:00")) <= c.fecha_concertada)
+		AND ((DATE_FORMAT(@fecha_concertada, "%Y-%m-%d %H:59:59")) >= c.fecha_concertada);
+        
+        -- Código alternativo
+        SELECT c.id_consulta, c.fecha_concertada FROM consultas c 
+		INNER JOIN doctores d
+		ON c.id_doctor = d.id_doctor
+		WHERE d.nombre_doctor = "James"
+		AND d.apellido_doctor = "Cameron"
+        AND c.fecha_concertada BETWEEN (DATE_FORMAT(@fecha_concertada, "%Y-%m-%d %H:00:00"))
+		AND (DATE_FORMAT(@fecha_concertada, "%Y-%m-%d %H:59:59"));
+        
+*/
 
-
-
-
-
+-- Crear un SP mediante (nombre, apellido, dni, poblacion(string), especialidad)
+  
 
 
 
