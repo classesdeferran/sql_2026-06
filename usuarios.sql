@@ -27,4 +27,15 @@ GRANT EXECUTE ON clinica.* TO 'clinica_auxiliar'@'localhost';
 SHOW GRANTS FOR 'clinica_auxiliar'@'localhost';
 SHOW GRANTS FOR 'clinica_admin'@'%';
 
+# Asignar al usuario solo permisos para utilizar las vistas
+GRANT SELECT ON clinica.vista_doctores TO 'clinica_auxiliar'@'localhost';
+GRANT SELECT ON clinica.usuarios_consultas_doctores TO 'clinica_auxiliar'@'localhost';
+
+# Crear usuarios individuales de la base de datos (no roles, como admin o auxiliar) 
+# mediante vistas les concedemos permisos de acceso SOLO a sus propios datos,
+# no a los de otros usuarios 
+CREATE USER 'LELT-8259'@'localhost' IDENTIFIED BY 'peterparker';
+GRANT SELECT ON clinica.usuarios_consultas_personalizada TO 'LELT-8259'@'localhost';
+CREATE USER 'SJPB-3489'@'localhost' IDENTIFIED BY 'peterparker';
+GRANT SELECT ON clinica.usuarios_consultas_personalizada TO 'SJPB-3489'@'localhost';
 

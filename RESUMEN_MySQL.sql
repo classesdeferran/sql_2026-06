@@ -550,6 +550,30 @@ SELECT * FROM usuarios_consultas;
 
 RENAME TABLE usuarios_consultas TO usuarios_consultas_doctores;
 
+DROP VIEW IF EXISTS usuarios_consultas_personalizada;
+
+CREATE OR REPLACE VIEW usuarios_consultas_personalizada AS 
+SELECT 
+	CONCAT(u.nombre_usuario,
+                ' ',
+                u.apellido_usuario) AS usuario,
+    u.fecha_nacimiento,
+    u.dni,
+    p.nombre_poblacion,
+	COALESCE(u.tel_movil, u.tel_fijo, "No tenemos datos de contacto") as contacto,
+    c.fecha_concertada,
+    CONCAT(d.nombre_doctor, " ", d.apellido_doctor) as doctor,
+    d.especialidad
+FROM poblaciones p
+JOIN usuarios u USING(id_poblacion)
+JOIN consultas c USING(id_usuario)
+JOIN doctores d USING(id_doctor)
+WHERE u.codigo_usuario = SUBSTRING_INDEX(USER(), '@', 1);
+# USER() -> 'LELT-8259@localhost'
+;
+
+SELECT * FROM usuarios_consultas_personalizada;
+
 /* FUNCIONES
 	Calcular, procesar datos y obligatoriamente devolver un valor
     Se utilizan dentro de SELECT
