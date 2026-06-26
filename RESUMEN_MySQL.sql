@@ -706,4 +706,10 @@ INSERT INTO usuarios(nombre_usuario, apellido_usuario, dni, fecha_nacimiento, id
 ("Franz", "Kafka", "87654321B", "1999-06-23", 2, "PPIV-4082");
 
 
+# Vista de la información parcial de un doctor
+DROP VIEW IF EXISTS vista_doctores;
+CREATE VIEW vista_doctores AS
+SELECT nombre_doctor, apellido_doctor, especialidad
+FROM doctores;
+
 
